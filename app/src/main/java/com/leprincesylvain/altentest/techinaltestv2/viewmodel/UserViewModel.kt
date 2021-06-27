@@ -19,4 +19,7 @@ class UserViewModel : ViewModel() {
         return liveDataUser
     }
 
+    fun updateUser(context: Context, user: UserTableModel) {
+        UserRepository.updateUser(context, user)
+    }
 }

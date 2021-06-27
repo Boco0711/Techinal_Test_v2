@@ -20,23 +20,23 @@ class UserRepository {
         }
 
         fun insertUser(context: Context, usertableModel: UserTableModel) {
-
             dataDatabase = initializeDB(context)
-
             CoroutineScope(Dispatchers.IO).launch {
                 dataDatabase!!.userDao().insertUser(usertableModel)
             }
-
         }
 
         fun getUser(context: Context, id: Int): LiveData<UserTableModel>? {
-
             dataDatabase = initializeDB(context)
-
             usertableModel = dataDatabase!!.userDao().getUser(id)
-
             return usertableModel
         }
 
+        fun updateUser(context: Context, usertableModel: UserTableModel) {
+            dataDatabase = initializeDB(context)
+            CoroutineScope(Dispatchers.IO).launch {
+                dataDatabase!!.userDao().updateUser(usertableModel)
+            }
+        }
     }
 }
