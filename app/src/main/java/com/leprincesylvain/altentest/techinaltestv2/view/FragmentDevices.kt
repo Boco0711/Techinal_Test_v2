@@ -39,7 +39,6 @@ class FragmentDevices : Fragment(), DeviceRecyclerViewClickListener {
             .getSharedPreferences("pref", Context.MODE_PRIVATE)
         callToReadJson = preferences.getInt("nbOfCall", 0)
 
-
         repository = DeviceRepository()
         deviceViewModel = ViewModelProvider(this).get(DeviceViewModel::class.java)
         if (callToReadJson == 0)
@@ -109,11 +108,12 @@ class FragmentDevices : Fragment(), DeviceRecyclerViewClickListener {
     }
 
     override fun onDeviceChangeClick(device: DeviceTableModel) {
-        TODO("Update device")
+        deviceViewModel.updateDevice(requireContext(), device)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         val edt: SharedPreferences.Editor = preferences.edit()
+        edt.putInt("nbOfCall", callToReadJson)
         edt.apply()
         super.onSaveInstanceState(outState)
     }

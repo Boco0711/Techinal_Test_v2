@@ -13,47 +13,46 @@ class DeviceRepository {
     companion object {
 
         private var dataDatabase: DataDatabase? = null
-
         private var deviceTableModel: LiveData<DeviceTableModel>? = null
 
-        private fun initializeDB(context: Context): DataDatabase {
-            return DataDatabase.getDatabaseInstance(context)
+        fun initializeDB(context: Context) {
+            dataDatabase = DataDatabase.getDatabaseInstance(context)
         }
 
         fun insertDevice(context: Context, deviceTableModel: DeviceTableModel) {
-            dataDatabase = initializeDB(context)
+            initializeDB(context)
             CoroutineScope(IO).launch {
                 dataDatabase!!.deviceDao().insertDevice(deviceTableModel)
             }
         }
 
         fun insertDevices(context: Context, devices: List<DeviceTableModel>) {
-            dataDatabase = initializeDB(context)
+            initializeDB(context)
             CoroutineScope(IO).launch {
                 dataDatabase!!.deviceDao().insertDevices(devices)
             }
         }
 
         fun getDevice(context: Context, id: Int): LiveData<DeviceTableModel>? {
-            dataDatabase = initializeDB(context)
+            initializeDB(context)
             deviceTableModel = dataDatabase!!.deviceDao().getDevice(id)
             return deviceTableModel
         }
 
         fun getDevices(context: Context): LiveData<MutableList<DeviceTableModel>> {
-            dataDatabase = initializeDB(context)
+            initializeDB(context)
             return dataDatabase!!.deviceDao().getDevices()
         }
 
         fun deleteDevice(context: Context, device: DeviceTableModel) {
-            dataDatabase = initializeDB(context)
+            initializeDB(context)
             CoroutineScope(IO).launch {
                 dataDatabase!!.deviceDao().deleteDevice(device)
             }
         }
 
         fun updateDevice(context: Context, device: DeviceTableModel) {
-            dataDatabase = initializeDB(context)
+            initializeDB(context)
             CoroutineScope(IO).launch {
                 dataDatabase!!.deviceDao().updateDevice(device)
             }

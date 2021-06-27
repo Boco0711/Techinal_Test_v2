@@ -12,12 +12,16 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.leprincesylvain.altentest.techinaltestv2.R
 import com.leprincesylvain.altentest.techinaltestv2.databinding.RecyclerviewDeviceLayoutBinding
 import com.leprincesylvain.altentest.techinaltestv2.model.device.DeviceTableModel
+import kotlinx.android.synthetic.main.recyclerview_device_layout.view.*
 
-class DevicesAdapter(private val devices: MutableList<DeviceTableModel>,
-private val listener: DeviceRecyclerViewClickListener) :
+class DevicesAdapter(
+    private val devices: MutableList<DeviceTableModel>,
+    private val listener: DeviceRecyclerViewClickListener
+) :
     Adapter<DevicesAdapter.DeviceViewHolder>() {
 
     var deviceFilterList = ArrayList<DeviceTableModel>()
+
     init {
         deviceFilterList = devices as ArrayList<DeviceTableModel>
     }
@@ -52,10 +56,13 @@ private val listener: DeviceRecyclerViewClickListener) :
             holder.recyclerviewDeviceBinding.deviceModeSwitch.isChecked = device.mode == "ON"
             holder.recyclerviewDeviceBinding.deviceModeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked) {
-                    device.mode = "OFF"
-                } else
                     device.mode = "ON"
-                //TODO update device
+                    buttonView.device_mode_switch.isChecked = true
+                } else {
+                    device.mode = "OFF"
+                    buttonView.device_mode_switch.isChecked = false
+                }
+                listener.onDeviceChangeClick(device)
             }
         }
     }
@@ -91,13 +98,18 @@ private val listener: DeviceRecyclerViewClickListener) :
                 fromUser: Boolean
             ) {
                 holder.recyclerviewDeviceBinding.seekBarTextview.text = progress.toString()
-                //TODO update device
+                when {
+                    device.temperature != null -> device.temperature = progress
+                    device.intensity != null -> device.intensity = progress
+                    device.position != null -> device.position = progress
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                listener.onDeviceChangeClick(device)
             }
         })
     }
