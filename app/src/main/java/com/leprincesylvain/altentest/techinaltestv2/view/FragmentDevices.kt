@@ -18,7 +18,7 @@ import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
 
-class FragmentDevices : Fragment(), RecyclerViewClickListener {
+class FragmentDevices : Fragment(), DeviceRecyclerViewClickListener {
     private lateinit var deviceViewModel: DeviceViewModel
     private lateinit var repository: DeviceRepository
     private var adapter: DevicesAdapter? = null
@@ -104,11 +104,11 @@ class FragmentDevices : Fragment(), RecyclerViewClickListener {
         }
     }
 
-    override fun onItemDeleteClick(device: DeviceTableModel) {
+    override fun onDeviceDeleteClick(device: DeviceTableModel) {
         deviceViewModel.deleteDevice(requireContext(), device)
     }
 
-    override fun onItemChangeClick(device: DeviceTableModel) {
+    override fun onDeviceChangeClick(device: DeviceTableModel) {
         TODO("Update device")
     }
 

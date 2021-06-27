@@ -31,4 +31,9 @@ class DeviceViewModel : ViewModel() {
         DeviceRepository.deleteDevice(context, device)
     }
 
+    fun updateDevice(context: Context, device: DeviceTableModel) {
+        DeviceRepository.updateDevice(context, device)
+    }
+
+
 }

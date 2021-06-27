@@ -21,4 +21,8 @@ interface DeviceDao {
 
     @Delete
     suspend fun deleteDevice(device: DeviceTableModel?)
+
+    @Update
+    suspend fun updateDevice(device: DeviceTableModel?)
+
 }

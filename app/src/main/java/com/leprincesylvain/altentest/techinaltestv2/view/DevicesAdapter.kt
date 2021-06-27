@@ -14,7 +14,7 @@ import com.leprincesylvain.altentest.techinaltestv2.databinding.RecyclerviewDevi
 import com.leprincesylvain.altentest.techinaltestv2.model.device.DeviceTableModel
 
 class DevicesAdapter(private val devices: MutableList<DeviceTableModel>,
-private val listener: RecyclerViewClickListener) :
+private val listener: DeviceRecyclerViewClickListener) :
     Adapter<DevicesAdapter.DeviceViewHolder>() {
 
     var deviceFilterList = ArrayList<DeviceTableModel>()
@@ -39,7 +39,7 @@ private val listener: RecyclerViewClickListener) :
         setSwitchButton(deviceFilterList[position], holder)
         setSeekBarValue(deviceFilterList[position], holder)
         holder.recyclerviewDeviceBinding.buttonDelete.setOnClickListener {
-            listener.onItemDeleteClick(deviceFilterList[position])
+            listener.onDeviceDeleteClick(deviceFilterList[position])
             notifyDataSetChanged()
         }
     }

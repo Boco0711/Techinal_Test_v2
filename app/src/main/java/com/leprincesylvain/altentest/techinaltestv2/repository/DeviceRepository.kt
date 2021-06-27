@@ -21,30 +21,22 @@ class DeviceRepository {
         }
 
         fun insertDevice(context: Context, deviceTableModel: DeviceTableModel) {
-
             dataDatabase = initializeDB(context)
-
             CoroutineScope(IO).launch {
                 dataDatabase!!.deviceDao().insertDevice(deviceTableModel)
             }
-
         }
 
         fun insertDevices(context: Context, devices: List<DeviceTableModel>) {
             dataDatabase = initializeDB(context)
-
             CoroutineScope(IO).launch {
                 dataDatabase!!.deviceDao().insertDevices(devices)
             }
-
         }
 
         fun getDevice(context: Context, id: Int): LiveData<DeviceTableModel>? {
-
             dataDatabase = initializeDB(context)
-
             deviceTableModel = dataDatabase!!.deviceDao().getDevice(id)
-
             return deviceTableModel
         }
 
@@ -60,5 +52,11 @@ class DeviceRepository {
             }
         }
 
+        fun updateDevice(context: Context, device: DeviceTableModel) {
+            dataDatabase = initializeDB(context)
+            CoroutineScope(IO).launch {
+                dataDatabase!!.deviceDao().updateDevice(device)
+            }
+        }
     }
 }
