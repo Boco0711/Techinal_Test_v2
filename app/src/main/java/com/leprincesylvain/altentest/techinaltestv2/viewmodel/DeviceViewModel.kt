@@ -23,8 +23,12 @@ class DeviceViewModel : ViewModel() {
         return liveDataDevice
     }
 
-    fun getDevices(context: Context): LiveData<List<DeviceTableModel>> {
+    fun getDevices(context: Context): LiveData<MutableList<DeviceTableModel>> {
         return DeviceRepository.getDevices(context)
+    }
+
+    fun deleteDevice(context: Context, device: DeviceTableModel) {
+        DeviceRepository.deleteDevice(context, device)
     }
 
 }

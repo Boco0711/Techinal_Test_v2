@@ -48,9 +48,16 @@ class DeviceRepository {
             return deviceTableModel
         }
 
-        fun getDevices(context: Context): LiveData<List<DeviceTableModel>> {
+        fun getDevices(context: Context): LiveData<MutableList<DeviceTableModel>> {
             dataDatabase = initializeDB(context)
             return dataDatabase!!.deviceDao().getDevices()
+        }
+
+        fun deleteDevice(context: Context, device: DeviceTableModel) {
+            dataDatabase = initializeDB(context)
+            CoroutineScope(IO).launch {
+                dataDatabase!!.deviceDao().deleteDevice(device)
+            }
         }
 
     }
