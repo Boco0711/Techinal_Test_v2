@@ -28,10 +28,10 @@ class UserRepository {
             return dataDatabase!!.userDao().getUser()
         }
 
-        fun updateUser(context: Context, usertableModel: UserTableModel) {
+        fun updateUser(context: Context, userTableModel: UserTableModel) {
             dataDatabase = initializeDB(context)
             CoroutineScope(Dispatchers.IO).launch {
-                dataDatabase!!.userDao().updateUser(usertableModel)
+                dataDatabase!!.userDao().updateUser(userTableModel)
             }
         }
     }

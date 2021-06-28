@@ -18,6 +18,7 @@ class DevicesAdapter(
     private val devices: MutableList<DeviceTableModel>,
     private val listener: DeviceRecyclerViewClickListener
 ) : Adapter<DevicesAdapter.DeviceViewHolder>(){
+    // TODO look to ListAdapter instead of Adapter to improve ui
 
     override fun getItemCount(): Int = this.devices.size
 
