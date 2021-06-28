@@ -1,5 +1,6 @@
 package com.leprincesylvain.altentest.techinaltestv2.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -7,7 +8,6 @@ import android.text.TextUtils
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.leprincesylvain.altentest.techinaltestv2.R
@@ -22,6 +22,7 @@ import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class FragmentUserProfile : Fragment() {
     private lateinit var repository: UserRepository
     private lateinit var userViewModel: UserViewModel
@@ -30,13 +31,12 @@ class FragmentUserProfile : Fragment() {
     private var callToReadJson = 0
     private var i = 0
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_profile_layout, container, false)
     }
 
@@ -52,7 +52,7 @@ class FragmentUserProfile : Fragment() {
             println("Data call json")
             readJson()
         }
-        userViewModel.getUser(this.requireContext()).observe(viewLifecycleOwner, Observer {
+        userViewModel.getUser(this.requireContext()).observe(viewLifecycleOwner, {
             it.let {
                 user = it
                 user_firstname_text.setText(it.firstName)
@@ -62,7 +62,7 @@ class FragmentUserProfile : Fragment() {
                 user_street_text.setText(it.address.street)
                 user_streetcode_text.setText(it.address.streetCode)
                 user_country_text.setText(it.address.country)
-                user_birthdate_text.setText(getDate(it.birthDate, "dd/MM/yyyy"))
+                user_birthdate_text.setText(getDateFromMilliSeconds(it.birthDate, "dd/MM/yyyy"))
             }
         })
 
@@ -71,30 +71,76 @@ class FragmentUserProfile : Fragment() {
             i++
             i %= 2
             if (i == 0) {
-                if (checkIfFieldsAreEmpty()) {
-                    Toast.makeText(
-                        requireContext(),
-                        "One or more field are empty, please fill them in or click on cancel",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    i++
-                } else {
-                    changeCancelVisibility(false)
-                    changeEditText(false)
-                    updateUser()
-                    profile_edit_button.setText("Edit profile")
+                when {
+                    checkIfFieldsAreEmpty() -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "One or more field are empty, please fill them in or click on cancel",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        i++
+                    }
+                    checkIfPostalCodeValueIsWrong() -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "PostalCode must be 5 Digit",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        i++
+                    }
+                    checkIfBirthDateValueIsWrong() -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "Invalid birthdate value",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        i++
+                    }
+                    else -> {
+                        changeCancelVisibility(false)
+                        changeEditText(false)
+                        updateUser()
+                        profile_edit_button.text = getString(R.string.edit_profile)
+                    }
                 }
             } else {
                 changeCancelVisibility(true)
                 changeEditText(true)
-                profile_edit_button.setText("Save Change")
+                profile_edit_button.text = getString(R.string.save_change)
             }
         }
     }
 
+    private fun checkIfBirthDateValueIsWrong(): Boolean {
+        val birthYear =
+            Integer.parseInt(user_birthdate_text.text.toString().substring(6))
+        if (user_birthdate_text.text.toString().length != 10) {
+            return true
+        } else if (user_birthdate_text.text.toString()[2] != '/' || user_birthdate_text.text.toString()[5] != '/') {
+            return true
+        } else if (user_birthdate_text.text.toString().replace("/", "").length != 8)
+            return true
+        else if (birthYear < 1903 || birthYear > 2020)
+            return true
+        return false
+    }
+
+    private fun checkIfPostalCodeValueIsWrong(): Boolean {
+        return user_postalcode_text.text.toString().length != 5
+    }
+
     private fun listenToCancel() {
         profile_cancel_button.setOnClickListener {
+            i++
+            changeCancelVisibility(false)
+            changeEditText(false)
+            profile_edit_button.text = getString(R.string.edit_profile)
             userViewModel.updateUser(this.requireContext(), user)
+            Toast.makeText(
+                requireContext(),
+                "Edit profile canceled",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -102,11 +148,11 @@ class FragmentUserProfile : Fragment() {
         user.firstName = user_firstname_text.text.toString()
         user.lastName = user_lastname_text.text.toString()
         user.address.city = user_city_text.text.toString()
-// TODO handle error case                user.address.postalCode = Integer.parseInt(user_postalcode_text.text.toString())
+        user.address.postalCode = (user_postalcode_text.text.toString()).toLong()
         user.address.street = user_street_text.text.toString()
         user.address.streetCode = user_streetcode_text.text.toString()
         user.address.country = user_country_text.text.toString()
-        // TODO handle error case  user.birthDate = user_birthdate_text.date
+        user.birthDate = getMilliSecondsFromDate(user_birthdate_text.text.toString())
         userViewModel.updateUser(this.requireContext(), user)
     }
 
@@ -168,14 +214,22 @@ class FragmentUserProfile : Fragment() {
         return false
     }
 
-    private fun getDate(milliSeconds: Long, dateFormat: String?): String? {
-        // Create a DateFormatter object for displaying date in specified format.
+    @SuppressLint("SimpleDateFormat")
+    private fun getDateFromMilliSeconds(milliSeconds: Long, dateFormat: String): String {
         val formatter = SimpleDateFormat(dateFormat)
-
-        // Create a calendar object that will convert the date and time value in milliseconds to date.
         val calendar: Calendar = Calendar.getInstance()
-        calendar.setTimeInMillis(milliSeconds)
-        return formatter.format(calendar.getTime())
+        calendar.timeInMillis = milliSeconds
+        return formatter.format(calendar.time)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getMilliSecondsFromDate(string: String): Long {
+        val parser = SimpleDateFormat("d/MM/yyyy")
+        val date = parser.parse(string)
+        val formatter = SimpleDateFormat("yyyy-MM-dd")
+        formatter.timeZone = TimeZone.getTimeZone("CEST")
+        val formattedDate = formatter.format(date!!)
+        return formatter.parse(formattedDate).time
     }
 
     private fun readJson() {
@@ -190,14 +244,14 @@ class FragmentUserProfile : Fragment() {
             val lastName = user.getString("lastName")
             val address = user.getJSONObject("address")
             val city = address.getString("city")
-            val postalCode = address.getInt("postalCode")
+            val postalCode = address.getLong("postalCode")
             val street = address.getString("street")
             val streetCode = address.getString("streetCode")
             val country = address.getString("country")
             val birthDate = user.getLong("birthDate")
 
-            val address_ = Address(city, country, postalCode, street, streetCode)
-            val userTableModel = UserTableModel(1, address_, birthDate, firstName, lastName)
+            val userAddress = Address(city, country, postalCode, street, streetCode)
+            val userTableModel = UserTableModel(1, userAddress, birthDate, firstName, lastName)
             userViewModel.insertUser(this.requireContext(), userTableModel)
         } catch (e: IOException) {
         }
