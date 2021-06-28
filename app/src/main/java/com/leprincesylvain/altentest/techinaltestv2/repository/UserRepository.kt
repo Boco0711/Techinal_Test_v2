@@ -10,10 +10,7 @@ import kotlinx.coroutines.launch
 
 class UserRepository {
     companion object {
-
         private var dataDatabase: DataDatabase? = null
-
-        private var usertableModel: LiveData<UserTableModel>? = null
 
         private fun initializeDB(context: Context): DataDatabase {
             return DataDatabase.getDatabaseInstance(context)
@@ -26,10 +23,9 @@ class UserRepository {
             }
         }
 
-        fun getUser(context: Context, id: Int): LiveData<UserTableModel>? {
+        fun getUser(context: Context): LiveData<UserTableModel> {
             dataDatabase = initializeDB(context)
-            usertableModel = dataDatabase!!.userDao().getUser(id)
-            return usertableModel
+            return dataDatabase!!.userDao().getUser()
         }
 
         fun updateUser(context: Context, usertableModel: UserTableModel) {
