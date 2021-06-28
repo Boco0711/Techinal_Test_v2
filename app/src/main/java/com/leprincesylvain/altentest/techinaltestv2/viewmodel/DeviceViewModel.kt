@@ -24,7 +24,6 @@ class DeviceViewModel : ViewModel() {
 
     fun getDevicesByType(context: Context, type: String): LiveData<MutableList<DeviceTableModel>> {
         return  DeviceRepository.getDevicesByType(context, type)
-
     }
 
     fun getDevices(context: Context): LiveData<MutableList<DeviceTableModel>> {
@@ -38,6 +37,5 @@ class DeviceViewModel : ViewModel() {
     fun updateDevice(context: Context, device: DeviceTableModel) {
         DeviceRepository.updateDevice(context, device)
     }
-
-
+    
 }
