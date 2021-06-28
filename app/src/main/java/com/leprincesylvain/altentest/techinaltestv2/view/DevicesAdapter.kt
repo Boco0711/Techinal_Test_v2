@@ -17,19 +17,12 @@ import kotlinx.android.synthetic.main.recyclerview_device_layout.view.*
 class DevicesAdapter(
     private val devices: MutableList<DeviceTableModel>,
     private val listener: DeviceRecyclerViewClickListener
-) :
-    Adapter<DevicesAdapter.DeviceViewHolder>() {
+) : Adapter<DevicesAdapter.DeviceViewHolder>(){
 
-    var deviceFilterList = ArrayList<DeviceTableModel>()
-
-    init {
-        deviceFilterList = devices as ArrayList<DeviceTableModel>
-    }
-
-    override fun getItemCount(): Int = deviceFilterList.size
+    override fun getItemCount(): Int = this.devices.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = DeviceViewHolder(
-        DataBindingUtil.inflate<RecyclerviewDeviceLayoutBinding>(
+        DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             R.layout.recyclerview_device_layout,
             parent,
@@ -39,16 +32,16 @@ class DevicesAdapter(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: DeviceViewHolder, position: Int) {
-        holder.recyclerviewDeviceBinding.device = deviceFilterList[position]
-        setSwitchButton(deviceFilterList[position], holder)
-        setSeekBarValue(deviceFilterList[position], holder)
+        holder.recyclerviewDeviceBinding.device = this.devices[position]
+        setSwitchButton(this.devices[position], holder)
+        setSeekBarValue(this.devices[position], holder)
         holder.recyclerviewDeviceBinding.buttonDelete.setOnClickListener {
-            listener.onDeviceDeleteClick(deviceFilterList[position])
+            listener.onDeviceDeleteClick(this.devices[position])
             notifyDataSetChanged()
         }
     }
 
-    private fun setSwitchButton(device: DeviceTableModel, holder: DevicesAdapter.DeviceViewHolder) {
+    private fun setSwitchButton(device: DeviceTableModel, holder: DeviceViewHolder) {
         if (device.mode == null) {
             holder.recyclerviewDeviceBinding.deviceModeSwitch.visibility = View.GONE
         } else {
@@ -106,7 +99,7 @@ class DevicesAdapter(
                         val progressD = progress.toDouble() / 2
                         device.temperature = progress / 2.toDouble()
                         holder.recyclerviewDeviceBinding.seekBarTextview.text =
-                            progressD.toString();
+                            progressD.toString()
                     }
                     device.intensity != null -> {
                         device.intensity = progress

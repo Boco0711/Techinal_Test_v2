@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 class DeviceRepository {
 
     companion object {
-        
+
         private var dataDatabase: DataDatabase? = null
 
         fun initializeDB(context: Context) {
