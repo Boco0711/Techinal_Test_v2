@@ -3,11 +3,12 @@ package com.leprincesylvain.altentest.techinaltestv2.view
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.leprincesylvain.altentest.techinaltestv2.R
 import com.leprincesylvain.altentest.techinaltestv2.model.device.DeviceTableModel
@@ -30,6 +31,7 @@ class FragmentDevices : Fragment(), DeviceRecyclerViewClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_device_layout, container, false)
     }
 
@@ -41,6 +43,7 @@ class FragmentDevices : Fragment(), DeviceRecyclerViewClickListener {
 
         repository = DeviceRepository()
         deviceViewModel = ViewModelProvider(this).get(DeviceViewModel::class.java)
+        deviceViewModel.initializeDb(requireContext())
         if (callToReadJson == 0)
             readJson()
         deviceViewModel.getDevices(this.requireContext())
@@ -101,6 +104,59 @@ class FragmentDevices : Fragment(), DeviceRecyclerViewClickListener {
             deviceViewModel.insertDevices(this.requireContext(), list)
         } catch (e: IOException) {
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.filter_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_type_light -> {
+                deviceViewModel.getDevicesByType(this.requireContext(), "Light")
+                    .observe(viewLifecycleOwner, { devices ->
+                        recycler_view_device.also {
+                            adapter = DevicesAdapter(devices, this)
+                            it.adapter = adapter
+                        }
+                    })
+            }
+            R.id.menu_type_rollershutter -> {
+                deviceViewModel.getDevicesByType(this.requireContext(), "RollerShutter")
+                    .observe(viewLifecycleOwner, { devices ->
+                        recycler_view_device.also {
+                            adapter = DevicesAdapter(devices, this)
+                            it.adapter = adapter
+                        }
+                    })
+            }
+            R.id.menu_type_heater -> {
+                deviceViewModel.getDevicesByType(this.requireContext(), "Heater")
+                    .observe(viewLifecycleOwner, { devices ->
+                        recycler_view_device.also {
+                            adapter = DevicesAdapter(devices, this)
+                            it.adapter = adapter
+                        }
+                    })
+            }
+            R.id.menu_type_all -> {
+                deviceViewModel.getDevices(this.requireContext())
+                    .observe(viewLifecycleOwner, { devices ->
+                        recycler_view_device.also {
+                            it.layoutManager = LinearLayoutManager(requireContext())
+                            it.setHasFixedSize(true)
+                            adapter = DevicesAdapter(devices, this)
+                            it.adapter = adapter
+                        }
+                    })
+            }
+            R.id.menu_profile -> {
+                val action = FragmentDevicesDirections.actionDevicesFragmentToProfileFragment()
+                findNavController().navigate(action)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDeviceDeleteClick(device: DeviceTableModel) {

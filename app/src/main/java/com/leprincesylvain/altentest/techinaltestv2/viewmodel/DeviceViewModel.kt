@@ -10,6 +10,10 @@ class DeviceViewModel : ViewModel() {
 
     private var liveDataDevice: LiveData<DeviceTableModel>? = null
 
+    fun initializeDb(context: Context) {
+        DeviceRepository.initializeDB(context)
+    }
+
     fun insertDevice(context: Context, deviceTableModel: DeviceTableModel) {
         DeviceRepository.insertDevice(context, deviceTableModel)
     }
@@ -18,9 +22,9 @@ class DeviceViewModel : ViewModel() {
         DeviceRepository.insertDevices(context, devices)
     }
 
-    fun getDevice(context: Context, id: Int): LiveData<DeviceTableModel>? {
-        liveDataDevice = DeviceRepository.getDevice(context, id)
-        return liveDataDevice
+    fun getDevicesByType(context: Context, type: String): LiveData<MutableList<DeviceTableModel>> {
+        return  DeviceRepository.getDevicesByType(context, type)
+
     }
 
     fun getDevices(context: Context): LiveData<MutableList<DeviceTableModel>> {

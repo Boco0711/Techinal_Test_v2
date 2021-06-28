@@ -13,8 +13,8 @@ interface DeviceDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertDevices(devices: List<DeviceTableModel>)
 
-    @Query("SELECT * FROM devices_table WHERE id = :id")
-    fun getDevice(id: Int?): LiveData<DeviceTableModel>
+    @Query("SELECT * FROM devices_table WHERE product_type = :type")
+    fun getDevice(type: String?): LiveData<MutableList<DeviceTableModel>>
 
     @Query("SELECT * FROM devices_table")
     fun getDevices(): LiveData<MutableList<DeviceTableModel>>

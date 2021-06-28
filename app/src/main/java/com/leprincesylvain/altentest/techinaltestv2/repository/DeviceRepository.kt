@@ -11,9 +11,8 @@ import kotlinx.coroutines.launch
 class DeviceRepository {
 
     companion object {
-
+        
         private var dataDatabase: DataDatabase? = null
-        private var deviceTableModel: LiveData<DeviceTableModel>? = null
 
         fun initializeDB(context: Context) {
             dataDatabase = DataDatabase.getDatabaseInstance(context)
@@ -33,14 +32,12 @@ class DeviceRepository {
             }
         }
 
-        fun getDevice(context: Context, id: Int): LiveData<DeviceTableModel>? {
+        fun getDevicesByType(context: Context, type: String): LiveData<MutableList<DeviceTableModel>> {
             initializeDB(context)
-            deviceTableModel = dataDatabase!!.deviceDao().getDevice(id)
-            return deviceTableModel
+            return dataDatabase!!.deviceDao().getDevice(type)
         }
 
         fun getDevices(context: Context): LiveData<MutableList<DeviceTableModel>> {
-            initializeDB(context)
             return dataDatabase!!.deviceDao().getDevices()
         }
 
@@ -52,7 +49,6 @@ class DeviceRepository {
         }
 
         fun updateDevice(context: Context, device: DeviceTableModel) {
-            initializeDB(context)
             CoroutineScope(IO).launch {
                 dataDatabase!!.deviceDao().updateDevice(device)
             }
