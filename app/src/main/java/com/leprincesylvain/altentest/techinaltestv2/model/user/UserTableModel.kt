@@ -11,9 +11,9 @@ data class UserTableModel(
     val id: Int,
 
     @TypeConverters(Converters::class)
-    val address: Address,
+    var address: Address,
 
-    val birthDate: Long,
-    val firstName: String,
-    val lastName: String
+    var birthDate: Long,
+    var firstName: String,
+    var lastName: String
 )

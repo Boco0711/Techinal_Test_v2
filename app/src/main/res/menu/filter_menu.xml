@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_filter"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/menu_ic_filter_list"
+        android:title="Filter">
+        <menu>
+        <item
+            android:id="@+id/menu_type_light"
+            android:title="Lights"
+            />
+
+        <item
+            android:id="@+id/menu_type_rollershutter"
+            android:title="RollerShutters"
+            />
+        <item
+            android:id="@+id/menu_type_heater"
+            android:title="Heaters"
+            />
+        <item
+            android:id="@+id/menu_type_all"
+            android:title="All" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/menu_profile"
+        app:showAsAction="always"
+        android:icon="@drawable/menu_ic_profile"
+        android:title="Profile"/>
+</menu>

@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/devicesFragment">
+    app:startDestination="@id/fragmentDevices">
 
     <fragment
-        android:id="@+id/devicesFragment"
+        android:id="@+id/fragmentDevices"
         android:name="com.leprincesylvain.altentest.techinaltestv2.view.FragmentDevices"
         android:label="devices_fragment"
         tools:layout="@layout/fragment_device_layout" >
         <action
             android:id="@+id/action_devicesFragment_to_profileFragment"
-            app:destination="@id/profileFragment"
+            app:destination="@id/fragmentProfile"
             app:enterAnim="@android:anim/slide_in_left"
             app:exitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left"
@@ -20,13 +20,13 @@
     </fragment>
 
     <fragment
-        android:id="@+id/profileFragment"
+        android:id="@+id/fragmentProfile"
         android:name="com.leprincesylvain.altentest.techinaltestv2.view.FragmentUserProfile"
         android:label="profile_fragment"
         tools:layout="@layout/fragment_profile_layout" >
         <action
             android:id="@+id/action_profileFragment_to_devicesFragment"
-            app:destination="@id/devicesFragment"
+            app:destination="@id/fragmentDevices"
             app:enterAnim="@android:anim/slide_in_left"
             app:exitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left"
