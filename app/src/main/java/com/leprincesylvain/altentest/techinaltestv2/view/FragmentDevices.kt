@@ -72,7 +72,7 @@ class FragmentDevices : Fragment(), DeviceRecyclerViewClickListener {
                 val productType = device.getString("productType")
                 var intensity: Int? = null
                 var position: Int? = null
-                var temperature: Int? = null
+                var temperature: Double? = null
                 var modeString: String? = null
                 if (device.has("intensity")) {
                     intensity = device.getInt("intensity")
@@ -81,7 +81,7 @@ class FragmentDevices : Fragment(), DeviceRecyclerViewClickListener {
                     position = device.getInt("position")
                 }
                 if (device.has("temperature")) {
-                    temperature = device.getInt("temperature")
+                    temperature = device.getDouble("temperature")
                 }
                 if (device.has("mode")) {
                     modeString = device.getString("mode")

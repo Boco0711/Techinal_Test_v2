@@ -24,7 +24,7 @@ data class DeviceTableModel(
     var position: Int?,
 
     @ColumnInfo(name = "temperature")
-    var temperature: Int?,
+    var temperature: Double?,
 
     @ColumnInfo(name = "mode")
     var mode: String?

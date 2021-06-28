@@ -85,9 +85,11 @@ class DevicesAdapter(
             "Heater" -> {
                 holder.recyclerviewDeviceBinding.seekBarTextview.text =
                     device.temperature.toString()
-                holder.recyclerviewDeviceBinding.deviceSeekbar.max = 28
-                holder.recyclerviewDeviceBinding.deviceSeekbar.min = 7
-                holder.recyclerviewDeviceBinding.deviceSeekbar.progress = device.temperature!!
+                holder.recyclerviewDeviceBinding.deviceSeekbar.max = 56
+                holder.recyclerviewDeviceBinding.deviceSeekbar.min = 14
+                holder.recyclerviewDeviceBinding.deviceSeekbar.incrementProgressBy(1)
+                holder.recyclerviewDeviceBinding.deviceSeekbar.progress =
+                    device.temperature!!.toInt() * 2
             }
         }
         holder.recyclerviewDeviceBinding.deviceSeekbar.setOnSeekBarChangeListener(object :
@@ -98,11 +100,20 @@ class DevicesAdapter(
                 fromUser: Boolean
             ) {
                 holder.recyclerviewDeviceBinding.seekBarTextview.text = progress.toString()
+
                 when {
-                    device.temperature != null -> device.temperature = progress
-                    device.intensity != null -> device.intensity = progress
+                    device.temperature != null -> {
+                        val progressD = progress.toDouble() / 2
+                        device.temperature = progress / 2.toDouble()
+                        holder.recyclerviewDeviceBinding.seekBarTextview.text =
+                            progressD.toString();
+                    }
+                    device.intensity != null -> {
+                        device.intensity = progress
+                    }
                     device.position != null -> device.position = progress
                 }
+
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
