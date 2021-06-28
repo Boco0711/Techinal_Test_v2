@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Test Alten</string>
+    <string name="delete_button_text">Supprimer</string>
+    <string name="edit_profile">Modifier profil</string>
+    <string name="save_change">Enregistrer</string>
+    <string name="cancel">Annuler</string>
+    <string name="cancel_edit_profile">La modification du profil a été annulé</string>
+    <string name="birthdate_value_error">La date de naissance est invalide</string>
+    <string name="postalcode_invalid_value">Le code postal doit être de 5 chiffres</string>
+    <string name="field_empty_value">Un ou plusieurs champs sont vides, veuillez les remplir ou cliquer sur Annuler</string>
+</resources>

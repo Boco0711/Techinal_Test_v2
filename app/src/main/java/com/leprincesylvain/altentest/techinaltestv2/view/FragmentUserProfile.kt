@@ -75,7 +75,7 @@ class FragmentUserProfile : Fragment() {
                     checkIfFieldsAreEmpty() -> {
                         Toast.makeText(
                             requireContext(),
-                            "One or more field are empty, please fill them in or click on cancel",
+                            getString(R.string.field_empty_value),
                             Toast.LENGTH_LONG
                         ).show()
                         i++
@@ -83,7 +83,7 @@ class FragmentUserProfile : Fragment() {
                     checkIfPostalCodeValueIsWrong() -> {
                         Toast.makeText(
                             requireContext(),
-                            "PostalCode must be 5 Digit",
+                            getString(R.string.postalcode_invalid_value),
                             Toast.LENGTH_LONG
                         ).show()
                         i++
@@ -91,7 +91,7 @@ class FragmentUserProfile : Fragment() {
                     checkIfBirthDateValueIsWrong() -> {
                         Toast.makeText(
                             requireContext(),
-                            "Invalid birthdate value",
+                            getString(R.string.birthdate_value_error),
                             Toast.LENGTH_LONG
                         ).show()
                         i++
@@ -138,7 +138,7 @@ class FragmentUserProfile : Fragment() {
             userViewModel.updateUser(this.requireContext(), user)
             Toast.makeText(
                 requireContext(),
-                "Edit profile canceled",
+                getString(R.string.cancel_edit_profile),
                 Toast.LENGTH_SHORT
             ).show()
         }

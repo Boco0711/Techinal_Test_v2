@@ -1,6 +1,11 @@
 <resources>
-    <string name="app_name">Techinal Test v2</string>
+    <string name="app_name">AltenTest</string>
     <string name="delete_button_text">Delete</string>
     <string name="edit_profile">Edit profile</string>
     <string name="save_change">Save Change</string>
+    <string name="cancel">Cancel</string>
+    <string name="cancel_edit_profile">Profile change has been cancelled</string>
+    <string name="birthdate_value_error">Date of birth is invalid</string>
+    <string name="postalcode_invalid_value">Postal code must be 5 digits</string>
+    <string name="field_empty_value">One or more fields are empty, please fill them out or click Cancel</string>
 </resources>
